@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%t^*c2@qvjcftulgo2jhn1fw!dvu@gy_vaij*&7qd#194==)kq'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -132,7 +132,7 @@ LOGIN_REDIRECT_URL = 'index'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STRIPE_SECRET_KEY = 'sk_test_51Iwzv4G646ByEKeYiqnoXvJzsC2MuZSk7e0SDnUVkkUK9NauhiasYgt1J4dfzfYr8SWXQB69qzn9xmzLlmdgxMQi00g05ge6Li'
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
 CRISPY_TEMPLATE_PACK ='bootstrap4'
 
 
