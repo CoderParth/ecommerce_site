@@ -1,0 +1,16 @@
+{% extends 'products/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+	<div class="container">
+		<div class="row">
+			<form method="POST">
+				{% csrf_token %}
+				{{ u_form | crispy }}
+				<button type="submit" class="btn btn-danger"> Update </button>
+				<a href="{% url 'profile' %}" class="btn btn-info" role="button"> Cancel </a>
+			</form>
+		</div>
+	</div>
+
+{% endblock content %}

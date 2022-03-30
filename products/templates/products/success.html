@@ -1,0 +1,18 @@
+{% extends 'products/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+<div class="alert alert-success" role="alert">
+	<h4 class="alert-heading">Payment Success!</h4>
+	<p> Thanks for purchasing out product! </p>
+	<hr>
+	<p class="mb-0"> Please visit your <a href="{% url 'profile' %}"> Profile </a> to view all the items you have ordered </p>
+  </div>
+
+{% for item in ordered_products %}
+	<li>{{ item.quantity_of_product }} X {{ item.product }}</li>
+
+{% endfor %}
+</div>
+ {% endblock content %}

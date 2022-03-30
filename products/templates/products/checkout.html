@@ -1,0 +1,162 @@
+{% extends "products/base.html" %}
+{% load static %}
+{% block content %}
+
+		<!-- BREADCRUMB -->
+		<div id="breadcrumb" class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<div class="col-md-12">
+						<h3 class="breadcrumb-header">Checkout</h3>
+						<ul class="breadcrumb-tree">
+							<li><a href="{% url 'index' %}">Home</a></li>
+							<li class="active">Checkout</li>
+						</ul>
+					</div>
+				</div>
+				<!-- /row -->
+
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /BREADCRUMB -->
+
+		<!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					{% if messages %}
+						{% for message in messages %}
+							<div class="alert alert-{{message.tags}}" role="alert">
+								{{ message }}
+							  </div>
+						{% endfor %}
+					{% endif %}
+					<div class="col-md-7">
+						<!-- Billing Details -->
+						<div class="billing-details">
+							<div class="section-title">
+								<h3 class="title">Billing address</h3>
+							</div>
+
+							<div class="form-group">
+								<input class="input" type="text" name="first-name" placeholder="First Name">
+							</div>
+							<div class="form-group">
+								<input class="input" type="text" name="last-name" placeholder="Last Name">
+							</div>
+							<div class="form-group">
+								<input class="input" type="email" name="email" placeholder="Email">
+							</div>
+							<div class="form-group">
+								<input class="input" type="text" name="address" placeholder="Address">
+							</div>
+							<div class="form-group">
+								<input class="input" type="text" name="city" placeholder="City">
+							</div>
+							<div class="form-group">
+								<input class="input" type="text" name="country" placeholder="Country">
+							</div>
+							<div class="form-group">
+								<input class="input" type="text" name="zip-code" placeholder="ZIP Code">
+							</div>
+							<div class="form-group">
+								<input class="input" type="tel" name="tel" placeholder="Telephone">
+							</div>
+
+							<div class="form-group">
+								<div class="input-checkbox">
+									<input type="checkbox" id="create-account">
+									<label for="create-account">
+										<span></span>
+										Shipping Adress same as billing address
+
+									</label>
+									<div>
+										<span> Note: This demo-site allows to place order without filling address</span>
+									</div>
+
+								</div>
+							</div>
+						</div>
+						<!-- /Billing Details -->
+
+
+
+
+					</div>
+
+					<!-- Order Details -->
+					<div class="col-md-5 order-details">
+						<div class="section-title text-center">
+							<h3 class="title">Your Order</h3>
+						</div>
+						<div class="order-summary">
+							<div class="order-col">
+								<div><strong>PRODUCT </strong></div>
+								<div><strong>TOTAL</strong></div>
+							</div>
+							<div class="order-products">
+								{% for item in checkout_products %}
+									<div class="order-col">
+										<div>{{ item.quantity }}x {{ item.product }} </div>
+										<div>${{ item.product.product_price }}
+											<form action="{% url 'remove_item' %}" method="POST">
+												{% csrf_token %}
+
+												<input type="text" name="product_id" value="{{ item.product.id }}" style="display: none;">
+												<button class="btn btn-warning" type="submit"> X </button>
+										</form>
+									</div>
+									</div>
+
+								{% endfor %}
+							</div>
+							<div class="order-col">
+								<div>Shipping</div>
+								<div><strong>FREE</strong></div>
+							</div>
+							<div class="order-col">
+								<div><strong>TOTAL</strong></div>
+								<div><strong class="order-total">$ {{ total_price }} </strong></div>
+							</div>
+						</div>
+
+
+
+						<form action="{% url 'place_order' %}" method="POST">
+							{% csrf_token %}
+							<div class="input-checkbox">
+								<input required type="checkbox" id="terms">
+								<label for="terms">
+									<span></span>
+									I've read and accept the terms & conditions
+								</label>
+							</div>
+							<div>
+								<span> Note: Currently, only card payments are accepted.
+									<br> Use "4242 4242 4242 4242" on the next page as card number for demonstration
+								<br> And 5 digits for zip code </span>
+							</div>
+							<input type="number" name="amount" value="{{ total_price }}" style="display: none;">
+						<button class="primary-btn order-submit" type="submit"> Place order </button>
+					</form>
+					</div>
+					<!-- /Order Details -->
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /SECTION -->
+<!-- <ul>
+	{% for item in user.cart_set.all %}
+		<li> {{ item.product.product_price }} </li>
+	{% endfor %}
+</ul>
+<h3> checkout page </h3> -->
+{% endblock content %}

@@ -1,0 +1,194 @@
+{% extends 'products/base.html' %}
+{% load static %}
+{% block content %}
+	<!-- BREADCRUMB -->
+	<div id="breadcrumb" class="section">
+		<!-- container -->
+		<div class="container">
+			<!-- row -->
+			<div class="row">
+				<div class="col-md-12">
+					<h3 class="breadcrumb-header">Product Detail </h3>
+					<ul class="breadcrumb-tree">
+						<li><a href="{% url 'index' %}">Home</a></li>
+						<li class="active">Product Detail </li>
+					</ul>
+				</div>
+			</div>
+			<!-- /row -->
+
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /BREADCRUMB -->
+<!-- SECTION -->
+<div class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+			{% if messages %}
+			{% for message in messages %}
+				<div class="alert alert-{{message.tags}}" role="alert">
+					{{ message }}
+			  	</div>
+
+			{% endfor %}
+		{% endif %}
+			<!-- Product main img -->
+			<div class="col-md-5 col-md-push-2">
+				<div id="product-main-img">
+					<div class="product-preview">
+						<img src="{{ product.product_image.url }}" alt="">
+					</div>
+				</div>
+			</div>
+			<!-- /Product main img -->
+
+			<!-- Product details -->
+			<div class="col-md-5 col-md-push-2">
+				<div class="product-details">
+					<h2 class="product-name">{{ product.product_name }}</h2>
+					<div>
+						<div class="product-rating">
+							{% if average_rating %}
+								{% for r in average_rating %}
+								<i class="fa fa-star"></i>
+								{% endfor %}
+							{% endif %}
+						</div>
+						<span class="review-link">{{ total_no_of_reviews }} Review(s) </span>
+					</div>
+					<div>
+						<h3 class="product-price">${{product.product_price }} <del class="product-old-price">$990.00</del></h3>
+						<span class="product-available">{{ product.product_status }}</span>
+					</div>
+					<p>{{ product.product_summary }}</p>
+
+					<div class="add-to-cart">
+						<form action="{% url 'add_to_cart' %}" method="POST">
+							{% csrf_token %}
+							<input type="text" name="product_id" value="{{ product.id }}" style="display: none;">
+						<button class="add-to-cart-btn" type="submit"><i class="fa fa-shopping-cart"></i> add to cart</button>
+						</form>
+					</div>
+
+					<ul class="product-btns">
+						<form action="{% url 'add_to_wishlist' %}" method="POST">
+							{% csrf_token %}
+						<input type="text" name="product_id" value="{{ product.id }}" style="display: none;">
+						<button class="btn btn-danger" type="submit"><i class="fa fa-heart-o"></i><span class="tooltipp">  Add to wishlist  </span> </button>
+						</form>
+					</ul>
+				</div>
+			</div>
+			<!-- /Product details -->
+
+			<!-- Product tab -->
+			<div class="col-md-12">
+				<div id="product-tab">
+					<!-- product tab nav -->
+					<ul class="tab-nav">
+						<li class="active"><a data-toggle="tab" href="#tab1">Description</a></li>
+						<li><a data-toggle="tab" href="#tab3">Reviews ({{ total_no_of_reviews }})</a></li>
+					</ul>
+					<!-- /product tab nav -->
+
+					<!-- product tab content -->
+					<div class="tab-content">
+						<!-- tab1  -->
+						<div id="tab1" class="tab-pane fade in active">
+							<div class="row">
+								<div class="col-md-12">
+									<p> {{ product.product_description }} </p>
+								</div>
+							</div>
+						</div>
+						<!-- /tab1  -->
+
+						<!-- tab3  -->
+						<div id="tab3" class="tab-pane fade in">
+							<div class="row">
+								<!-- Rating -->
+								<div class="col-md-3">
+									<div id="rating">
+										<div class="rating-avg">
+											<span> Average </span>
+											<div class="rating-stars">
+												{% if average_rating %}
+													{% for r in average_rating %}
+														<i class="fa fa-star"></i>
+													{% endfor %}
+												{% endif %}
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- /Rating -->
+
+								<!-- Reviews -->
+								<div class="col-md-6">
+									<div id="reviews">
+										<ul class="reviews">
+											{% for review in all_reviews %}
+											<li>
+												<div class="review-heading">
+													<h5 class="name">{{ review.user }}</h5>
+													<p class="date">{{ review.review_date }}</p>
+													<div class="review-rating">
+														<span style="color: rgb(230, 80, 80);">  {{ review.ratings }} out of 5 </span>
+
+													</div>
+												</div>
+												<div class="review-body">
+													<p>{{ review.review_text }}</p>
+												</div>
+											</li>
+											{% endfor %}
+										</ul>
+									</div>
+								</div>
+								<!-- /Reviews -->
+
+								<!-- Review Form -->
+								<div class="col-md-3">
+									<div id="review-form">
+										{% if user.is_authenticated %}
+										<form method="POST" action="{% url 'add_review' %}" class="review-form">
+											{% csrf_token %}
+											<input type="text" name="product_id" value="{{ product_id }}" style="display: none;">
+											<textarea required class="input" placeholder="Your Review" name="review_text" ></textarea>
+											<div class="input-rating">
+												<span>Your Rating: </span>
+												<div class="stars">
+													<input required id="star5" name="ratings" value="5" type="radio"><label for="star5"></label>
+													<input required id="star4" name="ratings" value="4" type="radio"><label for="star4"></label>
+													<input required id="star3" name="ratings" value="3" type="radio"><label for="star3"></label>
+													<input required id="star2" name="ratings" value="2" type="radio"><label for="star2"></label>
+													<input required id="star1" name="ratings" value="1" type="radio"><label for="star1"></label>
+												</div>
+											</div>
+											<button class="primary-btn" type="submit">Submit</button>
+										</form>
+
+										{% else %}
+										<span> Please <a href="{% url 'login' %}"> login </a> in order to add a review</span>
+										{% endif %}
+									</div>
+								</div>
+								<!-- /Review Form -->
+							</div>
+						</div>
+						<!-- /tab3  -->
+					</div>
+					<!-- /product tab content  -->
+				</div>
+			</div>
+			<!-- /product tab -->
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- /SECTION -->
+{% endblock content %}

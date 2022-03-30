@@ -1,0 +1,129 @@
+{% extends 'products/base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+			<div class="col-md-12">
+				<h3 class="breadcrumb-header">User Profile</h3>
+				<ul class="breadcrumb-tree">
+					<li><a href="{% url 'index' %}">Home</a></li>
+					<li class="active"> User Profile </li>
+				</ul>
+			</div>
+		</div>
+		<!-- /row -->
+
+	</div>
+	<!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+<div class="container padding-bottom-3x mb-2">
+    <div class="row">
+        {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{message.tags}}" role="alert">
+                {{ message }}
+              </div>
+        {% endfor %}
+    {% endif %}
+        <div class="col-lg-4 ">
+            <aside class="user-info-wrapper">
+
+                <div class="user-info">
+                    <div class="user-data">
+                        <h4> {{ request.user.username }}</h4><span>Joined February 06, 2017</span>
+                        <br>
+                        <a class="btn btn-danger" href="{% url 'profile_edit' %}"> Update Profile </a>
+                    </div>
+                </div>
+            </aside>
+            <nav class="list-group">
+                <a class="list-group-item with-badge" href="#orders"><i class=" fa fa-th"></i>Orders<span class="badge badge-primary badge-pill">{{ user.order_set.count }}</span></a>
+                <a class="list-group-item with-badge" href="#wishlist"><i class="fa fa-heart"></i>Wishlist<span class="badge badge-primary badge-pill"> {{ user.wishlist_set.count }}</span></a>
+            </nav>
+        </div>
+        <div class="col-lg-8">
+            <div class="padding-top-2x mt-2 hidden-lg-up"></div>
+            <!-- Wishlist Table-->
+            <div class="table-responsive wishlist-table margin-bottom-none">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Orders</th>
+                            <th class="text-center"><a class="btn btn-sm btn-outline-danger" href="#">Your orders</a></th>
+                        </tr>
+                        <a id="orders"></a>
+                    </thead>
+                    <tbody>
+                        {% for ordered_product in user.order_set.all %}
+                            <tr>
+                                <td>
+                                    <div class="product-item">
+                                        <div id="product-main-img">
+                                            <div class="product-preview">
+                                        <a class="product-thumb" href="#"><img src="{{ ordered_product.product.product_image.url }}" alt="Product"></a>
+                                                </div>
+                                                </div>
+                                        <div class="product-info">
+                                            <h4 class="product-title"><a href="/product_detail/{{ ordered_product.product.id }}/">{{ ordered_product.product }}</a></h4>
+                                            <div class="text-lg text-medium text-muted">${{ ordered_product.product.product_price }}</div>
+                                            <div>Ordered On:
+                                                <div class="d-inline text-success"> {{ ordered_product.date_ordered }} </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Wishlist </th>
+                            <a id="wishlist"></a>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for wishes in user.wishlist_set.all %}
+                        <tr>
+
+                            <td>
+                                <div class="product-item">
+                                    <div id="product-main-img">
+                                    <div class="product-preview">
+                                    <img src="{{ wishes.product.product_image.url }}" alt="Product">
+                                    </div>
+                                    </div>
+                                    <div class="product-info">
+                                        <h4 class="product-title"><a href="/product_detail/{{ wishes.product.id }}/"> {{ wishes.product }} </a></h4>
+                                        <div class="text-lg text-medium text-muted">${{ wishes.product.product_price }}</div>
+                                        <div>Availability:
+                                            <div class="d-inline text-warning"> {{ wishes.product.product_status }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+	                    {% endfor %}
+                        </tbody>
+                        </table>
+
+            </div>
+            <hr class="mb-4">
+
+
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+
+
+

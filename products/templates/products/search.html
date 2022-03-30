@@ -1,0 +1,203 @@
+{% extends 'products/base.html' %}
+{% load static %}
+{% block content %}
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+			<div class="col-md-12">
+				<ul class="breadcrumb-tree">
+					<li><a href="{% url 'index' %}">Home</a></li>
+					<li class="active"> Searh Products </li>
+				</ul>
+			</div>
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+
+<!-- SECTION -->
+<div class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+
+
+			<!-- ASIDE -->
+			<div id="aside" class="col-md-3">
+				<!-- aside Widget -->
+				<div class="aside">
+					<h3 class="aside-title"> Showing results for "{{ searched_product }}" </h3>
+				</div>
+				<!-- /aside Widget -->
+
+				<!-- aside Widget -->
+				<div class="aside">
+					<h3 class="aside-title"> Search products according to price</h3>
+					<form action="{% url 'price_sort' %}" method="GET">
+					<label for="price_min"> Price Min</label>
+						<input required id="price-min" type="number" name="price_min">
+					<label for="price_min"> Price Max</label>
+						<input id="price-min" type="number" name="price_max">
+						<input required type="text" value="{{ searched_product }}" name="searched_product" style="display: none;">
+						<button type="submit" class="btn btn-danger"> Search </button>
+					</form>
+				</div>
+				<!-- /aside Widget -->
+
+			</div>
+			<!-- /ASIDE -->
+
+			<!-- STORE -->
+			<div id="store" class="col-md-9">
+				<!-- store top filter -->
+				<div class="store-filter clearfix">
+					<div class="store-sort">
+						<form method="GET" action="{% url 'sort' %}">
+								<label for="sort"> Sort </label>
+								<select class="input-select" name="sort" id="sort" onchange="this.form.submit()">
+									{% if sort %}
+									<option value="{{ sort }}"> {{ sort }} </option>
+									{% endif %}
+
+									<option value="none"> None</option>
+									<option value="lowest to highest"> Price - Lowest to Highest </option>
+									<option value="highest to lowest"> Price - Highest to Lowest </option>
+								</select>
+								<input type="text" value="{{ searched_product }}" name="searched_product_for_sort" style="display: none;">
+							</form>
+					</div>
+				</div>
+				<!-- /store top filter -->
+
+				<!-- store products -->
+				<div class="row">
+
+					{% for product in filtered_list %}
+
+										<!-- product -->
+										<div class="col-md-4 col-xs-6">
+										<div class="product">
+
+											<div class="product-img">
+												<img src="{{ product.product_image.url }}" alt="">
+												<div class="product-label">
+													<span class="sale">-30%</span>
+													<span class="new">NEW</span>
+												</div>
+											</div>
+											<div class="product-body">
+
+												<h3 class="product-name"><a href="/product_detail/{{ product.id }}/">{{ product.product_name }}</a></h3>
+												<h4 class="product-price">${{ product.product_price }} <del class="product-old-price">$990.00 </del></h4>
+												<div class="product-rating">
+
+														{% for r in product.get_avg_rating %}
+															<i class="fa fa-star"></i>
+														{% endfor %}
+
+
+
+												</div>
+												<div class="product-btns">
+													<form action="{% url 'add_to_wishlist' %}" method="POST">
+														{% csrf_token %}
+													<input type="text" name="product_id" value="{{ product.id }}" style="display: none;">
+													<button class="btn btn-danger" type="submit"><i class="fa fa-heart-o"></i><span class="tooltipp">  Add to wishlist  </span> </button>
+													</form>
+													<a href="/product_detail/{{ product.id }}/" class="badge badge-info"><i class="fa fa-eye"></i> Detail view </a>
+
+												</div>
+											</div>
+											<div class="add-to-cart">
+												<form action="{% url 'add_to_cart' %}" method="POST">
+													{% csrf_token %}
+													<input type="text" name="product_id" value="{{ product.id }}" style="display: none;">
+												<button class="add-to-cart-btn" type="submit"><i class="fa fa-shopping-cart"></i> add to cart</button>
+												</form>
+											</div>
+
+										</div>
+									</div>
+										<!-- /product -->
+										{% endfor %}
+				</div>
+				<!-- /store products -->
+
+				<!-- store bottom filter -->
+				<div class="store-filter clearfix">
+					<span class="store-qty">Showing {{ filtered_list.count}} products</span>
+				</div>
+				<!-- /store bottom filter -->
+			</div>
+			<!-- /STORE -->
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- /SECTION -->
+
+<!-- FOOTER -->
+<footer id="footer">
+	<!-- top footer -->
+	<div class="section">
+		<!-- container -->
+		<div class="container">
+			<!-- row -->
+			<div class="row">
+				<div class="col-md-12 col-xs-6 justify-content-center">
+					<div class="footer">
+						<h3 class="footer-title">About Us</h3>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut. Lorem ipsum dolor sit amet, consectetur adipisicing elit.ipisci?</p>
+						<ul class="footer-links">
+							<li><a href="#"><i class="fa fa-map-marker"></i>798 Boulevard Road</a></li>
+							<li><a href="#"><i class="fa fa-phone"></i>(02) 9524 2111</a></li>
+							<li><a href="#"><i class="fa fa-envelope-o"></i>email@commsite.com</a></li>
+						</ul>
+					</div>
+				</div>
+
+
+			</div>
+			<!-- /row -->
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /top footer -->
+
+	<!-- bottom footer -->
+	<div id="bottom-footer" class="section">
+		<div class="container">
+			<!-- row -->
+			<div class="row">
+				<div class="col-md-12 text-center">
+					<ul class="footer-payments">
+						<li><a href="#"><i class="fa fa-cc-visa"></i></a></li>
+						<li><a href="#"><i class="fa fa-credit-card"></i></a></li>
+						<li><a href="#"><i class="fa fa-cc-paypal"></i></a></li>
+						<li><a href="#"><i class="fa fa-cc-mastercard"></i></a></li>
+						<li><a href="#"><i class="fa fa-cc-discover"></i></a></li>
+						<li><a href="#"><i class="fa fa-cc-amex"></i></a></li>
+					</ul>
+					<span class="copyright">
+						<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+						Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
+					<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+					</span>
+				</div>
+			</div>
+				<!-- /row -->
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /bottom footer -->
+</footer>
+<!-- /FOOTER -->
+
+{% endblock content %}
