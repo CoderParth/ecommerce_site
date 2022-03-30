@@ -1,3 +1,3 @@
 from django.shortcuts import render
 
-# Create your views here.
+# Almost all the views were placed in "product" app
