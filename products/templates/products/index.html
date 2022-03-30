@@ -3,30 +3,23 @@
 {% block content %}
 
 
-		<!-- NAVIGATION -->
-		<nav id="navigation">
+
 			<!-- container -->
 			<div class="container">
 				<!-- responsive-nav -->
-				<div id="responsive-nav">
-					<!-- NAV -->
-					<ul class="main-nav nav navbar-nav">
-						<li class="active"><a href="{% url 'index' %}">Home</a></li>
-						{% if user.is_authenticated %}
-							<li><a href="{% url 'profile' %}"> View Profile </a></li>
-							<li><a href="{% url 'logout' %}">Logout</a></li>
-						{% else %}
-							<li><a href="{% url 'login' %}"> Login </a></li>
-							<li><a href="{% url 'register' %}"> Register </a></li>
-						{% endif %}
-					</ul>
-					<!-- /NAV -->
-				</div>
-				<!-- /responsive-nav -->
+				<ul class="nav nav-pills" role="tablist">
+					<li role="presentation" class="active"><a href="{% url 'index' %}">Home </a></li>
+					{% if user.is_authenticated %}
+					<li role="presentation"><a href="{% url 'profile' %}">Profile</a></li>
+					<li role="presentation"><a href="{% url 'logout' %}">Logout </a></li>
+					{% else %}
+					<li role="presentation"><a href="{% url 'login' %}">Login </a></li>
+					<li role="presentation"><a href="{% url 'register' %}">Register</a></li>
+					{% endif %}
+				  </ul>
 			</div>
 			<!-- /container -->
-		</nav>
-		<!-- /NAVIGATION -->
+
 
 		<!-- SECTION -->
 		<div class="section">
