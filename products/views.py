@@ -8,7 +8,8 @@ from cart.models import Cart
 import stripe
 from django.conf import settings
 stripe.api_key = settings.STRIPE_SECRET_KEY
-# Create your views here.
+
+
 def index(request):
 	all_products = Product.objects.all()
 	context = {
